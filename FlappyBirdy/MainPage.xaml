@@ -3,23 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlappyBirdy.MainPage">
 
-    <Grid/>
-         <Image Source="FlappyBird.jpg"
-              AspectFill="Center"/>
-
-         <Image Source="FlappyBird.jpg"
-            AspectFill="Center"/>
-
-        <Image Source="FlappyBird.jpg"
-               AspectFill="Center"/>
-
-        <Image Source="quadrafundo.jpg"
-              AspectFill="Center"/>
-
-        <Image Source="passaronochao.jpg"
-              AspectFill="Center"/>
-
-        <Frame> 
+    
        
     <Grid>
         <Grid.RowDefinitions>
@@ -31,6 +15,17 @@
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
+        <Frame x:Name=""FrameGameOver"
+               BackgroundColor="#99000000"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill"
+               <Frame.GesturesRecognizers>
+               <TapGestureRecognizer Tapped=""OnGameOverClicked"/>
+               <Frame.GestureRecognizzers>
+               <Image Source="FlappyBird.jpg"/>
+               </Frame>
+
 
 
 
@@ -44,6 +39,7 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="0,20,0,20"/>
+      
 
 
 
