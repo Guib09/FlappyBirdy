@@ -1,0 +1,27 @@
+xml version="1.0" encoding="utf-8">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlappyBirdy.MainPage">
+              Shell.NavBarIsVisible="false">
+             
+    <Grid>
+
+<Image Source="FlappyBird.jpg"
+        HorizontalOptions="Fill"
+        VerticalOptions="Fill"/>
+
+
+<Image Source="FlappyBird.jpg"
+        x:Name="navelol"
+        HorizontalOptions="Fill"
+        WidthRequest="50"
+        HeightRequest="50"/>
+
+<Image Source="quadrafundo.jpg"
+       HorizontalOptions="End"
+       VerticalOptions="Start"/>
+
+<Image Source="passaronochao.jpg"
+       HorizontalOptions="End"
+       VerticalOptions="End"/>
+ <Grid/>
