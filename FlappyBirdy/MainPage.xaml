@@ -1,88 +1,88 @@
-﻿<xml version="1.0" encoding="utf-8">
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlappyBirdy.MainPage">
 
-    
-       
-    <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="120"/>
-          <RowDefinition Height="100"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+         
+            <Grid>
+                  <Image x:Name="Imgfundo"
+                    Source="fundo.png"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"/>
 
-        <Frame x:Name=""FrameGameOver"
-               BackgroundColor="#99000000"
-               HorizontalOptions="Fill"
-               VerticalOptions="Fill"
-               <Frame.GesturesRecognizers>
-               <TapGestureRecognizer Tapped=""OnGameOverClicked"/>
-               <Frame.GestureRecognizzers>
-               <Image Source="FlappyBird.jpg"/>
-               </Frame>
+                    <Image x:Name="Imgperry"
+                    Source="FlappyBirdy.png"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    HorizontalOptions="Start"/>
+                   
+                    <Image x:Name="Imgcanocima"
+                    Source="canoprabaixo.png"
+                     WidthRequest="300"
+                    HeightRequest="200"
+                    VerticalOptions="StartAndExpand"/>
+                  
+                    <Image x:Name="Imgcanobaixo"
+                    Source="canodiferente.png"
+                    WidthRequest="300"
+                    HeightRequest="200"
+                    VerticalOptions="End"/>
+                   
+                    <Image  x:Name="ImgChao"
+                     Source="chao.jpg"
+                     HorizontalOptions="Fill"
+                     VerticalOptions="End"/>
 
+                      <Frame x:Name="GameOverFrame"
+                         BackgroundColor="#99000000"
+                         HorizontalOptions="Fill"
+                         VerticalOptions="Fill">
 
+                           <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnGameOverClicked"/>
+                            </Frame.GestureRecognizers>
+                           
+                        
+                        <Grid>
+                         <Image x:Name="TapStart"
+                         Source="tap.png"
+                         HeightRequest="150"/>
 
+                        
+                      <!--      <Label x:Name="GameOver"
+                         Text="GAME OVER"
+                         FontFamily="Pixeled"
+                         HeightRequest="300"
+                         HorizontalOptions="End"
+                         VerticalOptions="Start"/>
 
-        
-    <Button Text="iniciar"
-            TextColor="Black" 
-            BackgroundColor="LightGray"
-            HorizontalOptions="Center" 
-            WidthRequest="200"
-            Clicked="irjogar"
-            Grid.Row="1"
-            Grid.Column="1"
-            Margin="0,20,0,20"/>
-      
+                        
+                      <Button
+                              Text="GAME OVER"
+                              FontFamily="Pixeled"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center"
+                              HeightRequest="100"
+                              WidthRequest="130"
+                              BackgroundColor="Black"/> -->
+                         
+                          <Button x:Name="ToGoHome"
+                              Clicked="OnToGoHomeClicked"
+                              Text="HOME"
+                              TextColor="white"
+                              FontFamily="Pixeled"
+                              BorderWidth="2"
+                              BorderColor="White"
+                              HeightRequest="100"
+                              HorizontalOptions="Fill"
+                              VerticalOptions="End"
+                              BackgroundColor="#ebb41e"/> 
 
+                                     
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <Frame/>
-        
-        
-        
-
-        
-
-        
-
-              
-
-
+                          </Grid>
+                      </Frame>
+                       <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ClickedFloatBird"/>
+                                </Grid.GestureRecognizers>
+             </Grid>
 </ContentPage>
