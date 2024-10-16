@@ -1,28 +1,28 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlappyBirdy.MainPage">
-
+              
          
             <Grid>
-                  <Image x:Name="Imgfundo"
-                    Source="fundo.png"
+                  <Image x:Name="imgfundo"
+                    Source="fundo.jpg"
                     HorizontalOptions="Fill"
                     VerticalOptions="Fill"/>
 
                     <Image x:Name="Imgperry"
-                    Source="FlappyBirdy.png"
+                    Source="flappbird.png"
                     HeightRequest="50"
                     WidthRequest="50"
                     HorizontalOptions="Start"/>
                    
                     <Image x:Name="Imgcanocima"
-                    Source="canoprabaixo.png"
+                    Source="canodec.png"
                      WidthRequest="300"
                     HeightRequest="200"
                     VerticalOptions="StartAndExpand"/>
                   
                     <Image x:Name="Imgcanobaixo"
-                    Source="canodiferente.png"
+                    Source="canoprabaixo.png"
                     WidthRequest="300"
                     HeightRequest="200"
                     VerticalOptions="End"/>
@@ -77,12 +77,13 @@
                               VerticalOptions="End"
                               BackgroundColor="#ebb41e"/> 
 
+            </Grid>
+        </Frame>
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Tapped="ClickedFloatBird"/>
+        </Grid.GestureRecognizers>
                                      
 
-                          </Grid>
-                      </Frame>
-                       <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="ClickedFloatBird"/>
-                                </Grid.GestureRecognizers>
+                          
              </Grid>
 </ContentPage>
