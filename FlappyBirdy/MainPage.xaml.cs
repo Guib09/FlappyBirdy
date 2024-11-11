@@ -1,295 +1,182 @@
 ﻿
 namespace FlappyBirdy;
+
 public partial class MainPage : ContentPage
 {
-	const int gravity = 1;
-	// a gravidade que vai ser aplicada no objeto
-
-	const int TimeToFrame = 33;
-	//tempo de espera dos frames ou fps
-
-	bool isDead = true;
-	// Óbvio que é quando o passaro cai pelo cano
-
-	double windowHeigth = 0;
-	// è a altura da janela 
-
-	double windowWidth = 0;
-	// è a espessura da janela que vai aparecer
-
-	int Fasty = 4;
-	//60 fps
-	// velocidade de movimento do cano
-
-	bool GameStarded = false;
-	// aqui eu crie essa variavel pra dizer quando o jogo começou 
-	// e fazer com que certos metodos funcionem melhor como o pulo 
-
-	const int MaxTimeFloating = 2;
-	//é o tempo que ele vai pular ate cair 
-
-	int TimeFloating = 0;
-	// ainda não entenmdi esse treco o meu tava mais facil
-
-	bool IsFloating = false;
-	// é pra dizer se esse negocio tá pulando ou não
-
-	const int PowerFloating = 30;
-	//é o tanto que vai pular porque o meu tava melhor mais 
-	// o tiagão falou que estava errado e eu como um bom aluno só estou
-	// fazendo para provar que o meu dava no mesmo
-
-	const int MaxDuna = 50;
-	// é a abertura entre os canos onde o passaro passa
-
+	const int gravidade = 5;
 	int Score = 0;
-	// é a pomtuação que a pessoa ganha 
-	//por passar pelo cano
-
-	//---------------------------------------------------------------------------------------//
+	const int aberturaMinima = 100;
+	const int tempoEntreFrames = 20;
+	bool estaMorto = false;
+	double larguraJanela = 0;
+	double AlturaJanela = 0;
+	int velocidade = 10;
+	const int ForcaPulo = 30;
+	const int MaximoTempoPulando = 3; //frames
+	bool EstaPulando = false;
+	int TempoPulando = 0;
 
 	public MainPage()
 	{
 		InitializeComponent();
 	}
-
-	//---------------------------------------------------------------------------------------//
-	void Initialize()
+	void AplicaGravidade()
 	{
-		isDead = false;
-		LabelFinalScore.IsVisible = false;
-		Imgperry.TranslationY = 0; 
-		Imgperry.TranslationX = 0;
-		Imgcanobaixo.TranslationX = -windowWidth;
-		Imgcanocima.TranslationX = -windowWidth;
-		ManagerCan();
-		Drawn();
+		Passaro.TranslationY += gravidade;
 	}
-
-	//---------------------------------------------------------------------------------------//
-	async Task Drawn()
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+		SoundHelper.Play("song.wav", true);
+    }
+    public async void Desenha()
 	{
-		while (!isDead)
-		// !=não, enquanto não está morto aplica gravidade
-		{      
-			
-			    IntroGravity();
-				ManagerCan();
-					if (IsFloating)
-					{	
-						FloatBird();
-					}
-					else
-					{
-						IntroGravity();
-						//Aqui é a gravidade que a gente atribuiu lá em cima
-						// que vai ser aplicada no passaro
-
-						ManagerCan();
-						//Colocando que enquanto o passaro não morreu 
-						//aplica a move dos canos tambem
-					}
-                IntroGravity();
-				ManagerCan();
-				if (IsColliding())
-					{
-						isDead = true;
-						GameOverFrame.IsVisible = true;
-						LabelFinalScore.IsVisible = true;
-						GameStarded= false;
-
-						break;
-						// Aqui a gente diz que se ele colidir então o jogo 
-						// não começou oque significa que a frame aparece
-
-					}
-
-			await Task.Delay(TimeToFrame);
-			// como esse é o tempo de espra entre os frames 
-		}
-	}
-
-	//---------------------------------------------------------------------------------------//
-
-	async void IntroGravity()
-	{
-		Imgperry.TranslationY += gravity;
-		// translation é a transiçao do eixo Y ou x no caso 
-		//como aumenta é oque vai fazer o pasarinho cair                                     
-	}
-
-	//---------------------------------------------------------------------------------------//
-
-	void FloatBird()
-	{
+		while (!estaMorto)
 		{
-			Imgperry.TranslationY -= PowerFloating;
-			//Imgperry é o nome que eu coloquei no x name do passarinho
-			// por enquanto é o pulo do passsaro
-			TimeFloating++;
-			if (TimeFloating > MaxTimeFloating)
+			if (EstaPulando)
+				AplicaPulo();
+			else
+				AplicaGravidade();
+			GerenciaCanos();
+			if (VerificaColisao())
 			{
-				IsFloating = false;
-				TimeFloating = 0;
+
+				estaMorto = true;
+				SoundHelper.Play("morte.wav");
+				FrameGameOver.IsVisible = true;
+				break;
 			}
+			await Task.Delay(tempoEntreFrames);
 		}
 	}
-	//---------------------------------------------------------------------------------------
-	void ClickedFloatBird(object s, TappedEventArgs a)
+	void AplicaPulo()
 	{
-		IsFloating = true;
-		// aqui a gente tá dizendo que o passarinho tá pulando 
-		//  oque faz a gravidade do passarinho diminuir ou ele pular 
+		Passaro.TranslationY -= ForcaPulo;
+		TempoPulando++;
+		if (TempoPulando >= MaximoTempoPulando)
+		{
+			EstaPulando = false;
+			TempoPulando = 0;
+		}
+	}
+	void OnGridClicked(object s, TappedEventArgs a)
+	{
+		EstaPulando = true;
 	}
 
-	//---------------------------------------------------------------------------------------//
-	void OnGameOverClicked(object s, TappedEventArgs a)
+	async void Oi(object s, TappedEventArgs e)
 	{
-		GameStarded= true;
-		GameOverFrame.IsVisible = false;
+
+		FrameGameOver.IsVisible = false;
+		estaMorto = false;
+		Inicializar();
+		Desenha();
+		SoundHelper.Play("song.wav");
+		LabelCanos.Text = "Você passou por " + Score.ToString("D3") + " Canos!!";
+	}
+
+	void Inicializar()
+	{
+		imgcanocima.TranslationX = -larguraJanela;
+		imgcanobaixo.TranslationX = -larguraJanela;
+		Passaro.TranslationX = 0;
+		Passaro.TranslationY = 0;
 		Score = 0;
-		Initialize();
-		// aqui quando clicar no frame ele vai definir 
-		// o jogo como começando oque possiblta ativar o pulo e clicked do passaro
-	}
-
-	//---------------------------------------------------------------------------------------//
-		bool IsColliding()
-	    {
-		if (!isDead)
-			{
-				if (IsCollidingSky() || IsCollidingHell()|| IsCollidingCanSky()||IsCollidingCanHell())
-				{
-					return true;
-				}
-			}
-			return false;
-		
-	    }
-	
-	//---------------------------------------------------------------------------------------//
-
-	bool IsCollidingSky()
-	{
-		var minY = -windowHeigth / 2;
-		if (Imgperry.TranslationY <= minY)
-			return true;
-		else
-			return false;
-	// aui é o metodo quando a altura do passaro chega ou ultrpassa
-	// o ceu ou teto do jogo oque faz ele hamar Is coliding
-	}
-	//---------------------------------------------------------------------------------------//
-
-	bool IsCollidingHell()
-	{
-		var maxY = windowHeigth / 2;
-		if (Imgperry.TranslationY >= maxY)
-			return true;
-		else
-			return false;
-	
-	// aqui a gente está criando o metodo toda vez que o passaro bater 
-	// no chao oque significa que quando ele chegar retorna true e então chama
-	// o metodo Is coloding
-	
-	}
-    //---------------------------------------------------------------------------------------//
-    bool IsCollidingCanSky()
-	{
-		var  posHPerry = (windowWidth/2) - (Imgperry.WidthRequest/2);
-		var posVPerry = (windowHeigth/2) - (Imgperry.HeightRequest/2) + Imgperry.TranslationY;
-		
-		if (posHPerry >= Math.Abs(Imgcanocima.TranslationX) -Imgcanocima.WidthRequest && 
-		    posHPerry <= Math.Abs(Imgcanocima.TranslationX) + Imgcanocima.WidthRequest &&
-		    posVPerry <= Imgcanocima.HeightRequest + Imgcanocima.TranslationY)
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
-	}
-	
-		bool IsCollidingCanHell()
-	{ 
-		var posHPerry = (windowWidth / 2) - (Imgperry.WidthRequest / 2);
-		var posVPerry = (windowHeigth / 2) + (Imgperry.HeightRequest / 2) + Imgperry.TranslationY;
-		var MaxCanY = Imgcanocima.HeightRequest + TranslationY + MaxDuna;
-		
-		if (posHPerry >=  Math.Abs (Imgcanobaixo.TranslationX) - Imgcanobaixo.WidthRequest && 
-			posHPerry <= Math.Abs (Imgcanobaixo.TranslationX) + Imgcanobaixo.WidthRequest &&
-			posVPerry >= MaxCanY)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		GerenciaCanos();
 	}
 
 
-	//---------------------------------------------------------------------------------------//
-	void OnToGoHomeClicked(object sender, EventArgs e)
-	{
-		Application.Current.MainPage = new StartPage();
-
-		GameStarded = false; 
-		// como ele volta pra tela de inicio
-		// então o jogo não pode estar rodando
-	}
-
-	//---------------------------------------------------------------------------------------//
-
-	void ManagerCan()
-	{
-		Imgcanobaixo.TranslationX -= Fasty;
-		Imgcanocima.TranslationX -= Fasty;
-		// aqui a genta está pedindo para que os canos se movam horizontalmente
-		// para a esquerda da janela 
-
-		if (Imgcanobaixo.TranslationX < -windowWidth)
-		// aqui é quando a tela acaba entã é redefinido a posiçaõ
-		// fazendo o cano voltar no ponto X e refazer o processo
-		
-		{
-			Imgcanobaixo.TranslationX = 0;
-            Imgcanocima.TranslationX = 0;
-			// aqui antes eram as imagens com o atributo zerado
-			// agora eu coloquei um negocinho só para eles votarem da direita
-			
-			var maxHeigth =-100;
-			var minHeigth = -Imgcanobaixo.HeightRequest;
-			// aqui são as variaveis que determinar a altura ou espaço
-			// que o passaro pode passar alem de colocar o minimo
-			
-			Imgcanocima.TranslationY = Random.Shared.Next((int)minHeigth, (int)maxHeigth);
-			Imgcanobaixo.TranslationY = Imgcanocima.TranslationY + MaxDuna + Imgcanobaixo.HeightRequest;
-			// aqui são as variaveis que determinam a aleotRIEDADE em que os cABNos vão aparecer
-
-			Score++;
-			LabelScore.Text = "Canos: " + Score.ToString("D3");
-			LabelFinalScore.Text = "Final Score:" + Score.ToString("D3");
-			if(Score %2 == 0)
-			Fasty ++;
-			// aqui a gente atribui o valor que quando é passado cada cano conta mais um
-			// Label é que ele vai mostar esses valores 
-			// Score dividido por dois significa que a cada dois canos ele vai aumnetar a velocidade
-		}
-	}
-
-	//---------------------------------------------------------------------------------------//
 	protected override void OnSizeAllocated(double w, double h)
 	{
 		base.OnSizeAllocated(w, h);
-		windowWidth = w;
-		//Espessura da janela
-		
-		windowHeigth = h;
-		// aqui a gente está definindo as janelas para definir o tamanho depois
+		larguraJanela = w;
+		AlturaJanela = h;
 	}
 
-	//---------------------------------------------------------------------------------------//
+	void GerenciaCanos()
+	{
+		imgcanocima.TranslationX -= velocidade;
+		imgcanobaixo.TranslationX -= velocidade;
+		if (imgcanobaixo.TranslationX < -larguraJanela)
+		{
+			imgcanobaixo.TranslationX = 0;
+			imgcanocima.TranslationX = 0;
+
+			var alturaMax = -100;
+			var alturaMin = -imgcanobaixo.HeightRequest;
+			imgcanocima.TranslationY = Random.Shared.Next((int)alturaMin, (int)alturaMax);
+			imgcanobaixo.TranslationY = imgcanocima.TranslationY + aberturaMinima + imgcanobaixo.HeightRequest;
+
+			Score++;
+			SoundHelper.Play("win.wav");
+			LabelScore.Text = "Canos: " + Score.ToString("D3");
+			if (Score % 2 == 0)
+				velocidade++;
+
+		}
+
+
+	}
+	bool VerificaColisao()
+	{
+
+		return VerificaColisaoTeto() ||
+		   VerificaColisaoChao() ||
+		   VerificaColisaoCanoCima() ||
+		   VerificaColisaoCanoBaixo();
+
+	}
+
+
+	bool VerificaColisaoTeto()
+	{
+		var minY = -AlturaJanela / 2;
+		if (Passaro.TranslationY <= minY)
+			return true;
+
+		else
+			return false;
+	}
+	bool VerificaColisaoChao()
+	{
+		var maxY = AlturaJanela / 2 - chao.HeightRequest;
+		if (Passaro.TranslationY >= maxY)
+			return true;
+		else
+			return false;
+
+	}
+
+	bool VerificaColisaoCanoCima()
+	{
+		var posHPassaro = (larguraJanela / 2) - (Passaro.WidthRequest / 2);
+		var posVPassaro = (AlturaJanela / 2) - (Passaro.HeightRequest / 2) + Passaro.TranslationY;
+		if (posHPassaro >= Math.Abs(imgcanocima.TranslationX) - imgcanocima.WidthRequest &&
+		 posHPassaro <= Math.Abs(imgcanocima.TranslationX) + imgcanocima.WidthRequest &&
+		 posVPassaro <= imgcanocima.HeightRequest + imgcanocima.TranslationY)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	bool VerificaColisaoCanoBaixo()
+	{
+		var posHPassaro = (larguraJanela / 2) - (Passaro.WidthRequest / 2);
+		var posVPassaro = (AlturaJanela / 2) - (Passaro.HeightRequest / 2) + Passaro.TranslationY;
+		var yMaxCano = imgcanocima.HeightRequest + imgcanocima.TranslationY + aberturaMinima;
+		if (posHPassaro >= Math.Abs(imgcanobaixo.TranslationX) - imgcanobaixo.WidthRequest &&
+		 posHPassaro <= Math.Abs(imgcanobaixo.TranslationX) + imgcanobaixo.WidthRequest &&
+		 posVPassaro >= yMaxCano)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 }
