@@ -2,82 +2,88 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlappyBirdy.MainPage">
     <Grid>
-              <Grid.GestureRecognizers>
-                     <TapGestureRecognizer Tapped="OnGridClicked"/>
-              </Grid.GestureRecognizers>
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnGridClicked"/>
+        </Grid.GestureRecognizers>
 
-              <Image Source="background.png"
-                     Opacity=".5"
-                     Aspect="AspectFill"
-                     HorizontalOptions="Fill"
-                     VerticalOptions="Fill"/>
-              <Label Text="Canos:000"
-                     x:Name="LabelScore"
-                     HorizontalOptions="End"
-                     VerticalOptions="Start"
-                     Margin="10,10,10,10 "/>
-              <Image Source="canodecima.png"
-                     x:Name="imgcanocima"
-                     HeightRequest="650"
-                     WidthRequest="50"
-                     Aspect="AspectFit"
-                     HorizontalOptions="End"
-                     VerticalOptions="Start"/>
-              <Image Source="canodebaixo.png"
-                     x:Name="imgcanobaixo"
-                     HeightRequest="650"
-                     WidthRequest="50"
-                     Aspect="AspectFit"
-                     HorizontalOptions="End"
-                     VerticalOptions="End"/>
-              <Image Source="flappbird.png"
-                     x:Name="Passaro"
-                     HeightRequest="60"
-                     WidthRequest="60"
-                     HorizontalOptions="Center"
-                     VerticalOptions="Center"/>
-              <Image Source="gameoverflappy.jpg"
-                     x:Name="chao"
-                     HeightRequest="90"
-                     Aspect="AspectFill"
-                     HorizontalOptions="Center"
-                     VerticalOptions="End"/>
+        <Image Source="background.png"
+               Opacity="0.5"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill"/>
 
-              <Frame IsVisible="true"
-                     x:Name="FrameGameOver"
-                     BackgroundColor="#99000000"
-                     HorizontalOptions="Fill"
-                     VerticalOptions="Fill"
-                     CornerRadius="0">
+        <Label Text="Canos:000"
+               x:Name="LabelScore"
+               HorizontalOptions="End"
+               VerticalOptions="Start"
+               Margin="10,10,10,10"/>
 
-                     <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Oi"/>
-                     </Frame.GestureRecognizers>
-                     <Grid>
-                            <Grid.RowDefinitions>
-                                   <RowDefinition Height="*"/>
-                                   <RowDefinition Height="*"/>
-                                   <RowDefinition Height="*"/>
-                                   <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Image Source="FlappyBird.jpg"
-                                   HeightRequest="500"
-                                   WidthRequest="250"
-                                   Grid.Row="0"/>
-                            <Frame Grid.Row="1"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center">
-                                   <Grid>
-                                          <Grid.ColumnDefinitions>
-                                                 <ColumnDefinition Width="*"/>
-                                                 <ColumnDefinition Width="*"/>
-                                          </Grid.ColumnDefinitions>
+        <Image Source="canodecima.png"
+               x:Name="imgcanocima"
+               HeightRequest="650"
+               WidthRequest="50"
+               Aspect="AspectFit"
+               HorizontalOptions="End"
+               VerticalOptions="Start"/>
 
+        <Image Source="canodebaixo.png"
+               x:Name="imgcanobaixo"
+               HeightRequest="650"
+               WidthRequest="50"
+               Aspect="AspectFit"
+               HorizontalOptions="End"
+               VerticalOptions="End"/>
 
-                     </Grid>
+        <Image Source="flappbird.png"
+               x:Name="Passaro"
+               HeightRequest="60"
+               WidthRequest="60"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
 
-              </Frame>
+        <Image Source="gameoverflappy.jpg"
+               x:Name="chao"
+               HeightRequest="90"
+               Aspect="AspectFill"
+               HorizontalOptions="Center"
+               VerticalOptions="End"/>
 
+        <Frame IsVisible="true"
+               x:Name="FrameGameOver"
+               BackgroundColor="#99000000"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill"
+               CornerRadius="0">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Oi"/>
+            </Frame.GestureRecognizers>
 
-       </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Image Source="FlappyBird.jpg"
+                       HeightRequest="500"
+                       WidthRequest="250"
+                       Grid.Row="0"/>
+
+                <Frame Grid.Row="1"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Aqui você pode adicionar outros controles dentro do Grid -->
+                    </Grid>
+                </Frame>
+            </Grid>
+        </Frame>
+    </Grid>
 </ContentPage>
